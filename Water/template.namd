@@ -1,0 +1,76 @@
+
+# input system......
+structure	abf.psf         
+coordinates     abf.pdb
+
+#..force field........................
+paratypecharmm	on                       
+parameters      par_all22_prot_cmap_mex.inp
+exclude		scaled1-4                 
+1-4scaling	1.0                        
+dielectric      1.0                        
+
+switching	  on                   
+switchdist 	  8.0                  
+cutoff		  12.0             
+pairlistdist	  13.5                 
+margin		  0.0 
+stepspercycle	  20                  
+rigidBonds        all                 
+rigidTolerance    0.00001 
+rigidIterations   100
+
+# Ewald EL..........................
+PME             on                
+PMETolerance    0.000001           
+PMEGridSizeX    40
+PMEGridSizeY    40
+PMEGridSizeZ    40                 
+
+#integrator ............
+timestep 1.0                              
+fullElectFrequency  4                     
+
+# NVT
+langevin          on
+langevinDamping   5
+# langevinTemp      500
+langevinHydrogen  off
+
+# NPT
+useGroupPressure      yes #  for rigid bonds...
+useFlexibleCell       no
+useConstantArea       no
+
+langevinPiston        on
+langevinPistonTarget  1.01325 
+langevinPistonPeriod  200.
+langevinPistonDecay   100.
+# langevinPistonTemp    500
+
+# Solute scaling
+soluteScaling on
+soluteScalingAll on
+soluteScalingFile spt.pdb
+soluteScalingCol B
+
+# FEP
+alch                    on
+alchType                FEP
+alchFile                fep.pdb
+alchCol                 B
+alchVdwLambdaEnd        1.0
+alchElecLambdaStart     0.5
+alchVdWShiftCoeff       5.0
+alchDecouple            off
+alchLambda2		1.  ; # we don't need this, but it's required
+
+# periodic boundary conditions......
+# cellBasisVector1  65.098  0.0    0.0
+# cellBasisVector2   0.0   65.098  0.0
+# cellBasisVector3   0.0    0.0   65.098
+cellOrigin         0.0    0.0    0.0
+
+# wrapAll on
+wrapWater on
+
